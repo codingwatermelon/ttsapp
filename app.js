@@ -49,7 +49,7 @@ client.on('interactionCreate', async interaction => {
 
 			await interaction.reply(`Received text as '${text}'`)
 
-      videoCount++;
+			videoCount++;
 
 		}
 
