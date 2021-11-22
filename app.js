@@ -27,12 +27,32 @@ client.on('interactionCreate', async interaction => {
 		const { commandName } = interaction;
 
 		if (commandName === 'ping') {
-					await interaction.reply('Pong!');
-				} else if (commandName === 'server') {
-							await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
-						} else if (commandName === 'user') {
-									await interaction.reply(`Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`);
-								}
+			await interaction.reply('Pong!');
+		}
+		else if (commandName === 'server') {
+			await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
+		}
+		else if (commandName === 'user') {
+			await interaction.reply(`Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`);
+		}
+		else if (commandName === 'tts') {
+
+			// Get string to speak
+			const text = await interaction.options.getString('input')
+
+      fs.writeFile('media/' + videoCount + '-tts.txt', text, function (err) {
+        if (err) return console.log(err);
+        console.log("Couldn't write TTS file.");
+      });
+
+			console.log(`Received text as '${text}'`)
+
+			await interaction.reply(`Received text as '${text}'`)
+
+      videoCount++;
+
+		}
+
 });
 
 client.on('messageCreate', receivedMessage => {
@@ -54,14 +74,6 @@ client.on('messageCreate', receivedMessage => {
 
       //let messageToSend = "Writing file to media/txtfiles as tts.txt";
 
-      let ttsString = receivedMessage.content.split("!tts ")[1]
-
-      fs.writeFile('media/' + videoCount + '-tts.txt', ttsString, function (err) {
-        if (err) return console.log(err);
-        console.log("Couldn't write TTS file.");
-      });
-
-      videoCount++;
 
       //receivedMessage.channel.send(messageToSend)
 
@@ -177,4 +189,3 @@ client.on('messageCreate', receivedMessage => {
 if (process.env.DISCORDBOTID) {
       client.login(process.env.DISCORDBOTID)
 }
-
