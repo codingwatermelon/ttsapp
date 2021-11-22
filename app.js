@@ -2,13 +2,10 @@ const { Client, Intents } = require('discord.js');
 const ytdl = require('ytdl-core')
 const fs = require('fs')
 
-
-//const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
-let playYoutubeRE = /^!play https:\/\/www.youtube.com\/watch\?v=.{11}$/;
-let saveYoutubeRE = /^!save https:\/\/www.youtube.com\/watch\?v=.{11}$/;
-let ttsRE = /^!tts .*$/;
+let youtubeURLRE = /^https:\/\/www.youtube.com\/watch\?v=.{11}$/;
+let ttsRE = /^[a-zA-Z0-9]*$/;
 
 let videoCount = 0;
 
@@ -37,17 +34,29 @@ client.on('interactionCreate', async interaction => {
 		}
 		else if (commandName === 'read') {
 
+			let messageToSend = "";
 			// Get string to speak
 			const text = interaction.options.getString('text')
 
-			fs.writeFile('media/' + videoCount + '-tts.txt', text, function (err) {
-				if (err) return console.log(err);
-        console.log("Couldn't write TTS file.");
-      });
+			// Validate text
+			if (text.match(ttsRE)) {
 
-			await interaction.reply(`Playing text as '${text}'`)
+				fs.writeFile('media/' + videoCount + '-tts.txt', text, function (err) {
+					if (err) return console.log(err);
+	        console.log("Couldn't write TTS file.");
+	      });
 
-			videoCount++;
+				messageToSend = `Playing text as '${text}'`
+
+				videoCount++;
+			}
+			else {
+
+				messageToSend = 'Invalid entry: Enter text and numbers only'
+
+			}
+
+			await interaction.reply(messageToSend)
 
 		}
 		else if (commandName === 'play') {
@@ -61,14 +70,23 @@ client.on('interactionCreate', async interaction => {
 				// Get string from interaction
 				const youtubeURL = interaction.options.getString('youtubeurl')
 
-        let youtubeID = youtubeURL.split("=")[1]
+				// Validate youtubeURL
+				if (youtubeURL.match(youtubeURLRE)) {
 
-        // Download file to media directory
-        const stream = ytdl(youtubeURL, { filter: 'audioonly' }).pipe(fs.createWriteStream('media/' + videoCount + "-" + youtubeID + '.mp3'));
-        videoCount++;
+	        let youtubeID = youtubeURL.split("=")[1]
 
-        messageToSend = "Queueing song...";
+	        // Download file to media directory
+	        const stream = ytdl(youtubeURL, { filter: 'audioonly' }).pipe(fs.createWriteStream('media/' + videoCount + "-" + youtubeID + '.mp3'));
+	        videoCount++;
 
+	        messageToSend = "Queueing song...";
+
+				}
+				else {
+
+					messageToSend = "Invalid URL: Copy & paste the complete Youtube URL into this command e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+				}
       }
       else {
 
@@ -90,14 +108,23 @@ client.on('interactionCreate', async interaction => {
 				// Get string from interaction
 				const youtubeURL = interaction.options.getString('youtubeurl')
 
-        let youtubeID = youtubeURL.split("=")[1]
+				// Validate youtubeURL
+				if (youtubeURL.match(youtubeURLRE)) {
 
-        // Download file to media directory
-        const stream = ytdl(youtubeURL, { filter: 'audioonly' }).pipe(fs.createWriteStream('media/saved/' + videoCount + "-" + youtubeID + '.mp3'));
-        videoCount++;
+	        let youtubeID = youtubeURL.split("=")[1]
 
-        messageToSend = "Saving song...";
+	        // Download file to media directory
+	        const stream = ytdl(youtubeURL, { filter: 'audioonly' }).pipe(fs.createWriteStream('media/saved/' + videoCount + "-" + youtubeID + '.mp3'));
+	        videoCount++;
 
+	        messageToSend = "Saving song...";
+
+				}
+				else {
+
+					messageToSend = "Invalid URL: Copy & paste the complete Youtube URL into this command e.g., https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+
+				}
       }
       else {
 
@@ -159,10 +186,10 @@ client.on('messageCreate', receivedMessage => {
           messageToSend = ":^)";
           break;
         case 8:
-          messageToSend = "SUP";
+          messageToSend = "SUP lols";
           break;
         case 9:
-          messageToSend = "Haha!";
+          messageToSend = "bro don't @ me";
           break;
 
       }
