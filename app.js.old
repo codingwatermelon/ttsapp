@@ -1,9 +1,9 @@
+//const Discord = require('discord.js')
 const { Client, Intents } = require('discord.js');
 const ytdl = require('ytdl-core')
 const fs = require('fs')
 
-
-//const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+//const client = new Discord.Client()
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES] });
 
 let playYoutubeRE = /^!play https:\/\/www.youtube.com\/watch\?v=.{11}$/;
@@ -12,30 +12,14 @@ let ttsRE = /^!tts .*$/;
 
 let videoCount = 0;
 
-client.once('ready', () => {
-		console.log('Ready!');
-		client.user.setActivity("your every move", {type: "WATCHING"})
+client.on('ready', () => {
 
-});
+    console.log(`logged in as ${client.user.tag}!`);
 
-client.on('interactionCreate', async interaction => {
-
-	console.log("interaction triggered")
-
-		if (!interaction.isCommand()) return;
-
-		const { commandName } = interaction;
-
-		if (commandName === 'ping') {
-					await interaction.reply('Pong!');
-				} else if (commandName === 'server') {
-							await interaction.reply(`Server name: ${interaction.guild.name}\nTotal members: ${interaction.guild.memberCount}`);
-						} else if (commandName === 'user') {
-									await interaction.reply(`Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`);
-								}
 });
 
 client.on('messageCreate', receivedMessage => {
+
 
     console.log(`received message`);
     // TODO restrict !play command to authorized users
@@ -43,6 +27,7 @@ client.on('messageCreate', receivedMessage => {
     // TODO add command to clear queue
 
     // Set bot status
+    client.user.setActivity("your every move", {type: "WATCHING"})
 
     // Prevent bot from responding to its own messages
     if (receivedMessage.author == client.user) {
@@ -172,9 +157,22 @@ client.on('messageCreate', receivedMessage => {
 
   }
 
-});
+  if (receivedMessage.content === 'ping') {
+
+      receivedMessage.channel.send('pong');
+
+  }
+
+})
 
 if (process.env.DISCORDBOTID) {
-      client.login(process.env.DISCORDBOTID)
-}
 
+  console.log("Logging in")
+  client.login(process.env.DISCORDBOTID) // Replace XXXXX with your bot token
+
+}
+else {
+
+  console.log("Please load DISCORDBOTID as environment variable (docker run ... -e DISCORDBODID='xxx'' or 'docker run ... --env-file /path/to/envfile.txt')")
+
+}

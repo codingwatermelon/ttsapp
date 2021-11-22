@@ -1,6 +1,5 @@
 # Use arm32v7 to run on Raspberry Pi 3
-#FROM arm32v7/node:14
-FROM arm32v7/node:14.18.1-slim
+FROM arm32v7/node:16.13.0-slim
 
 # Optimize app for production
 ENV NODE_ENV production
@@ -31,4 +30,3 @@ COPY . .
 EXPOSE 8080
 #CMD [ "node", "app.js" ]
 CMD ["node", "app.js"]
-
