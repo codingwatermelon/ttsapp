@@ -46,9 +46,10 @@ client.on('interactionCreate', async interaction => {
 	        console.log("Couldn't write TTS file.");
 	      });
 
-				messageToSend = `Playing text as '${text}'`
+				messageToSend = `Processing text to speech for: '${text}'`
 
 				videoCount++;
+				
 			}
 			else {
 
