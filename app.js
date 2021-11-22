@@ -38,7 +38,7 @@ client.on('interactionCreate', async interaction => {
 		else if (commandName === 'tts') {
 
 			// Get string to speak
-			const text = await interaction.options.getString('input')
+			const text = interaction.options.getString('input')
 
       fs.writeFile('media/' + videoCount + '-tts.txt', text, function (err) {
         if (err) return console.log(err);
