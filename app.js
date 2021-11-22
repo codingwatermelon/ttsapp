@@ -59,7 +59,7 @@ client.on('interactionCreate', async interaction => {
       if (media.length < 10) {
 
 				// Get string from interaction
-				const youtubeURL = interaction.options.getString('youtubeURL')
+				const youtubeURL = interaction.options.getString('youtubeurl')
 
         let youtubeID = youtubeURL.split("=")[1]
 
@@ -88,7 +88,7 @@ client.on('interactionCreate', async interaction => {
       if (media.length < 100) {
 
 				// Get string from interaction
-				const youtubeURL = interaction.options.getString('youtubeURL')
+				const youtubeURL = interaction.options.getString('youtubeurl')
 
         let youtubeID = youtubeURL.split("=")[1]
 
