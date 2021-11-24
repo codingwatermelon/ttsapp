@@ -49,7 +49,7 @@ client.on('interactionCreate', async interaction => {
 				messageToSend = `Processing text to speech for: '${text}'`
 
 				videoCount++;
-				
+
 			}
 			else {
 
@@ -202,5 +202,8 @@ client.on('messageCreate', receivedMessage => {
 });
 
 if (process.env.DISCORDBOTID) {
-      client.login(process.env.DISCORDBOTID)
+		client.login(process.env.DISCORDBOTID)
+}
+else {
+		console.log('Could not find DISCORDBOTID environment variable. Please supply it via command line using the --env-file flag.')
 }
